@@ -1,4 +1,4 @@
-import { Model, isValidObjectId } from 'mongoose';
+import { Document, Model, isValidObjectId } from 'mongoose';
 import { Pokemon } from '../entities/pokemon.entity';
 
 abstract class Search {
@@ -11,7 +11,7 @@ class FindByName implements Search {
     private name: string,
     private pokemonModel: Model<Pokemon>,
   ) {}
-  async search(): Promise<any> {
+  async search(): Promise<Document<unknown, object, Pokemon>> {
     return await this.pokemonModel.findOne({ name: this.name });
   }
 }
@@ -21,7 +21,7 @@ class FindById implements Search {
     private id: string,
     private pokemonModel: Model<Pokemon>,
   ) {}
-  async search(): Promise<any> {
+  async search(): Promise<Document<unknown, object, Pokemon>> {
     return await this.pokemonModel.findById(this.id);
   }
 }
@@ -31,7 +31,7 @@ class FindByPokemonId implements Search {
     private pokemonId: string,
     private pokemonModel: Model<Pokemon>,
   ) {}
-  async search(): Promise<any> {
+  async search(): Promise<Document<unknown, object, Pokemon>> {
     return await this.pokemonModel.findOne({ no: this.pokemonId });
   }
 }
@@ -41,10 +41,10 @@ export const PokemonPetitionFactory = (
   pokemonModel: Model<Pokemon>,
 ) => {
   if (!isNaN(+param)) {
-    return new FindByPokemonId(param, pokemonModel);
+    return new FindByPokemonId(param, pokemonModel).search();
   } else if (isValidObjectId(param)) {
-    return new FindById(param, pokemonModel);
+    return new FindById(param, pokemonModel).search();
   } else {
-    return new FindByName(param, pokemonModel);
+    return new FindByName(param, pokemonModel).search();
   }
 };
