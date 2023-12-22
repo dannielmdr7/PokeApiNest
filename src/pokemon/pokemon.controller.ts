@@ -7,12 +7,14 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put
+  Put,
+  Query,
 } from '@nestjs/common';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id/parse-mongo-id.pipe';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PokemonService } from './pokemon.service';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('pokemon')
 export class PokemonController {
@@ -25,8 +27,9 @@ export class PokemonController {
   }
 
   @Get()
-  findAll() {
-    return this.pokemonService.findAll();
+  findAll(@Query() queryParams: PaginationDto) {
+    const { limit = 20, offset = 0 } = queryParams;
+    return this.pokemonService.findAll({ limit, offset });
   }
 
   @Get(':term')

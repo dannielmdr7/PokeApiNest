@@ -25,8 +25,13 @@ export class PokemonService {
     }
   }
 
-  findAll() {
-    return `This action returns all pokemon`;
+  findAll({ limit, offset }) {
+    return this.pokemonModel
+      .find()
+      .limit(limit)
+      .skip(offset)
+      .sort({ no: 1 })
+      .select('-__v');
   }
 
   async findOne(param: string) {
@@ -36,7 +41,7 @@ export class PokemonService {
         this.pokemonModel,
       );
       if (!pokemon) {
-        HandleCustomResponse({
+        return HandleCustomResponse({
           status: 'error',
           msg: `The Pokemon with search param ${param} has not found`,
         });
@@ -82,6 +87,22 @@ export class PokemonService {
       });
     } catch (error) {
       return HandleErrorsResponse(error);
+    }
+  }
+
+  async clearDb() {
+    try {
+      await this.pokemonModel.deleteMany();
+    } catch (error) {
+      console.error({ error });
+    }
+  }
+
+  async insertMany(pokemons: CreatePokemonDto[]) {
+    try {
+      await this.pokemonModel.insertMany(pokemons);
+    } catch (error) {
+      console.error({ error });
     }
   }
 }
