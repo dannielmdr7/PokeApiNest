@@ -1,19 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
-  Put,
+  Param,
+  Post,
+  Put
 } from '@nestjs/common';
-import { PokemonService } from './pokemon.service';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id/parse-mongo-id.pipe';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
-import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id/parse-mongo-id.pipe';
+import { PokemonService } from './pokemon.service';
 
 @Controller('pokemon')
 export class PokemonController {
