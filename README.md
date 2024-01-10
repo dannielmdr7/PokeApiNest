@@ -26,11 +26,18 @@ npm i -g @nestjs/cli
 docker-compose up -d
 ```
 
-5. Reocnstuir la base de Datos.
+5. Reconstuir la base de Datos.
 
 ```
 hacer get a este endpont /api/v2/seed
 ```
+
+# Build de Producción 
+
+1. Crear el archivo ```.env.prod```
+2. llenar las variables de entorno de producción ```MONGODB Y PORT```
+3. Crear la nueva imágen: ``` docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build ```
+
 
 ## Stack usado
 
